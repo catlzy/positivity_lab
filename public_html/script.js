@@ -8,7 +8,7 @@
 
 
 // Points.
-var posArray = new Array(), negArray=new MVCArray();
+var posArray = new Array(), negArray=new Array();
 
 // Gradients.
 var posGradient, negGradient;
@@ -17,7 +17,7 @@ var posGradient, negGradient;
 var posHeatmap, negHeatmap;
 
 // Initialize everything.
-function init() {       
+function init() {
         initPoints();
         initGradients();
         initMap();
@@ -26,8 +26,8 @@ function init() {
 
 
 function initPoints() {
-        // Note: data is stored in data.js.        
-		
+        // Note: data is stored in data.js.
+
         for (var i = 0; i < data.length; i++) {
                 score = data[i]["score"]
                 lat = data[i]["t"]
@@ -39,9 +39,9 @@ function initPoints() {
 				if (score >= 0.5)
 					posArray.push(point);
 				else
-					negArray.push(point);                           
+					negArray.push(point);
         }
-		
+
 }
 
 function initGradients() {
@@ -209,13 +209,13 @@ var styles1 = [
             }
         ]
     }
-];   
-		
+];
+
 
 	map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 9,
-			center: {lat: 39.284534, lng: -76.616362}, 
-			styles:styles1				
+			center: {lat: 39.284534, lng: -76.616362},
+			styles:styles1
 	});
 	;
 
@@ -238,7 +238,7 @@ function initHeatMaps() {
                 radius: 90
         });
 		posHeatmap.setMap(map);
-		negHeatmap.setMap( map );        
+		negHeatmap.setMap( map );
 }
 
 
@@ -247,40 +247,40 @@ function process_data(data){
 	var step = 0.05;
 	var start_lat = 25;
 	var start_lng = -122;
-	
+
 	var rectangles = {};
-	
+
 	for (var i=0; i< pointsData.length; i++){
 		var lng = pointsData[i]["g"];
 		var lat =pointsData[i]["t"];
-		
+
 		var lng_units = Math.floor((lng - start_lng)/step);
 		var new_lng = start_lng + lng_units * step;
-		
-		
+
+
 		var lat_units = Math.floor((lat - start_lat)/step);
 		var new_lat = start_lat + lat_units * step;
-		
+
 		//console.log("old-lat ="+lat+" new_lat ="+new_lat);
 		//console.log("old-lng ="+lng+" new_lng ="+new_lng);
 		var coord_key = new_lat+","+new_lng;
-		
+
 		var counts = new Array(2);
 		counts[0] = 0;
 		counts[1] = 0;
 		if (rectangles[coord_key]!=null){
 			counts[0] = rectangles[coord_key][0];
-			counts[1] = rectangles[coord_key][1];		
+			counts[1] = rectangles[coord_key][1];
 		}
 		if(pointsData[i]["p"]==1)
 			counts[0]++;
 		counts[1]++;
 		rectangles[coord_key] = counts;
 	}
-	
+
 	//console.log(rectangles);
-	
-	
+
+
 	var new_data = [];
 	for (var key in rectangles) {
 		// check if the property/key is defined in the object itself, not in parent
@@ -292,7 +292,7 @@ function process_data(data){
 			var lng = parseFloat(a[1]);
 			var score = parseFloat(val_arr[0])/parseFloat(val_arr[1]);
 			var new_point = {};
-			
+
 			new_point["p"] = 2*Number((score).toFixed(2));
 			new_point["t"] = lat;
 			new_point["g"] = lng;
@@ -300,6 +300,6 @@ function process_data(data){
 		}
 	}
 	//console.log(new_data);
-	return new_data;		
-	
+	return new_data;
+
 }

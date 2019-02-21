@@ -50,12 +50,11 @@ emo_repl_order = [k for (k_len,k) in
                   reversed(sorted([(len(k),k) for k in emo_repl.keys()]))]
 
 
-def clean_tweet(tweet, emo_repl_order, emo_repl, re_repl ):
+def clean_tweet(tweet, emo_repl_order, emo_repl, re_repl):
     tweet = tweet.lower()
     for k in emo_repl_order:
         tweet = tweet.replace(k, emo_repl[k])
 
     for r, repl in re_repl.items():
         tweet = re.sub(r, repl, tweet)
-
     return tweet
